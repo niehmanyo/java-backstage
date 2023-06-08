@@ -1,32 +1,46 @@
 package com.example.demo.Controller;
 
 
+import com.example.demo.Entity.Manager;
 import com.example.demo.Entity.User;
 import com.example.demo.Mapper.UserMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/user")
 @RestController
-
+@CrossOrigin(origins = "http://localhost:5173/")
 public class UserController {
 
     @Autowired
     private UserMapper userMapper;
 
     @GetMapping("/login")
-    public List<User> getLoginManagers() {
+    public List<Manager> getLoginManagers() {
+
         return userMapper.findAll();
     }
 
     @PostMapping("/register")
-    public int register(@RequestBody User user) {
-        return userMapper.register(user);
+    public int register(@RequestBody Manager manager) {
+        return userMapper.register(manager);
     }
 
+
+    @PostMapping("/insert")
+    public int insertUser(@RequestBody User user) {
+        Date dt = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        String mysqlDate = sdf.format(dt);
+        user.setDate(mysqlDate);
+        return userMapper.insertUser(user);
+    }
 
     /*
      *  做分页查询
@@ -36,9 +50,14 @@ public class UserController {
      *
      * */
     @GetMapping("/page")
-    public List<User> getPageInfo(@RequestParam Integer PageNum, @RequestParam Integer PageSize) {
+    public Map<String, Object> getPageInfo(@RequestParam Integer PageNum, @RequestParam Integer PageSize) {
         PageNum = (PageNum - 1) * PageSize;
-        return userMapper.getPageInfo(PageNum, PageSize);
+        Integer total = userMapper.selectAll();
+        Map<String, Object> res = new HashMap<>();
+        List<User> data = userMapper.getPageInfo(PageNum, PageSize);
+        res.put("total", total);
+        res.put("data", data);
+        return res;
     }
 
 
