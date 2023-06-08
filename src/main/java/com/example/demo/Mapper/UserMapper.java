@@ -15,4 +15,8 @@ public interface UserMapper {
 
 
     int register(User user);
+
+
+    @Select("select * from login_info limit #{pageNum},#{pageSize}")
+    List<User> getPageInfo(Integer pageNum, Integer pageSize);
 }
