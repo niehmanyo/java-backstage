@@ -15,16 +15,20 @@ import java.util.Map;
 
 @RequestMapping("/user")
 @RestController
-@CrossOrigin(origins = "http://localhost:5173/")
+@CrossOrigin(origins = "http://localhost:5173/")      //本地跨域解决问题，允许这个域名访问
 public class UserController {
 
     @Autowired
     private UserMapper userMapper;
 
     @GetMapping("/login")
-    public List<Manager> getLoginManagers() {
-
-        return userMapper.findAll();
+    public Map<String, Object> getLoginManagers() {
+        Map<String, Object> res = new HashMap<>();
+        Integer total = userMapper.selectAllManager();
+        List<Manager> list = userMapper.findAll();
+        res.put("total",total);
+        res.put("data", list);
+        return res;
     }
 
     @PostMapping("/register")

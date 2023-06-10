@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-@Mapper
+
 public interface UserMapper {
 
 
@@ -22,6 +22,9 @@ public interface UserMapper {
 
     @Select("select count(*) from vue_tb")
     Integer selectAll();
+
+    @Select("select count(*) from login_info")
+    Integer selectAllManager();
 
 
     Integer insertUser(User user);
