@@ -7,6 +7,11 @@ server:
 # nwy is database
 
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    # 这个需要配置，不然会出现一下报错，springboot2.7 需要配置
+    # org.springframework.context.ApplicationContextException: Failed to start bean 'documentationPluginsBootstrapper'; nested exception is java.lang.NullPointerException
   datasource:
     url: jdbc:mysql://localhost:3306/nwy?serverTimezone=GMT%2b8
     username: root
@@ -15,6 +20,10 @@ spring:
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
+
+mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  # ???????? Impl
+  # 只要调用接口，就会打印
+
+#springfox.documentation.swagger-ui.enabled: true

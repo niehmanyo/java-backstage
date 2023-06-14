@@ -7,7 +7,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@Configuration  // 提供配置的注解，让 springboot 能够读取
 @MapperScan("com.example.demo.Mapper")
 public class MybatisPlusConfig {
 

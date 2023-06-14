@@ -4,6 +4,7 @@ package com.example.demo.Controller;
 import com.example.demo.Entity.Manager;
 import com.example.demo.Entity.User;
 import com.example.demo.Mapper.UserMapper;
+import com.example.demo.Service.UserService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,6 +21,9 @@ public class UserController {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/login")
     public Map<String, Object> getLoginManagers() {
@@ -38,13 +42,15 @@ public class UserController {
 
 
     @PostMapping("/insert")
-    public int insertUser(@RequestBody User user) {
+    public boolean insertUser(@RequestBody User user) {
         Date dt = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat();
         String mysqlDate = sdf.format(dt);
         user.setDate(mysqlDate);
-        return userMapper.insertUser(user);
+        return userService.save(user);
     }
+
+
 
     /*
      *  做分页查询
