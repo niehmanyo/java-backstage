@@ -18,6 +18,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 public class Swagger3Config {
     /**
      *   application中还配置了mvc，因为springboot2.6.1与swagger3不兼容
+     *   进入 localhost:9090/swagger-ui/index.html
      */
 
     public Docket createRestApi() {

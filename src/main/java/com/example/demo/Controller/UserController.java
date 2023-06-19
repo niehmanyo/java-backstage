@@ -1,6 +1,9 @@
 package com.example.demo.Controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.Entity.Manager;
 import com.example.demo.Entity.User;
 import com.example.demo.Mapper.UserMapper;
@@ -13,6 +16,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+/**
+ * @author :Wayne.Nie
+ * UserController: 封装好的函数，前端接口访问该文件的路径来访问数据库
+ * */
+
+
 
 @RequestMapping("/user")
 @RestController
@@ -30,7 +40,7 @@ public class UserController {
         Map<String, Object> res = new HashMap<>();
         Integer total = userMapper.selectAllManager();
         List<Manager> list = userMapper.findAll();
-        res.put("total",total);
+        res.put("total", total);
         res.put("data", list);
         return res;
     }
@@ -48,8 +58,13 @@ public class UserController {
         String mysqlDate = sdf.format(dt);
         user.setDate(mysqlDate);
         return userService.save(user);
+        
     }
 
+    @GetMapping("/search")
+    public boolean searchUser(@RequestParam String username,@RequestParam String foodName){
+        return Boolean.TRUE;
+    }
 
 
     /*
@@ -60,14 +75,25 @@ public class UserController {
      *
      * */
     @GetMapping("/page")
-    public Map<String, Object> getPageInfo(@RequestParam Integer PageNum, @RequestParam Integer PageSize) {
-        PageNum = (PageNum - 1) * PageSize;
-        Integer total = userMapper.selectAll();
-        Map<String, Object> res = new HashMap<>();
-        List<User> data = userMapper.getPageInfo(PageNum, PageSize);
-        res.put("total", total);
-        res.put("data", data);
-        return res;
+    public IPage<User> getPageInfo(@RequestParam Integer PageNum,
+                                   @RequestParam Integer PageSize,
+                                   @RequestParam(defaultValue = "") String name,
+                                   @RequestParam(defaultValue = "") String foodName) {
+//        这是 Mybatis 里面的写法
+//        PageNum = (PageNum - 1) * PageSize;
+//        Integer total = userMapper.selectAll();
+//        Map<String, Object> res = new HashMap<>();
+//        List<User> data = userMapper.getPageInfo(PageNum, PageSize);
+//        res.put("total", total);
+//        res.put("data", data);
+        IPage<User> page = new Page<>(PageNum, PageSize);
+        System.out.println(name);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        if (!"".equals(name)){
+            queryWrapper.like("name",name);
+        }
+        return userService.page(page,queryWrapper);
+        // 这边接口回调一定要看他返回的类型，之前我声明是 data，现在用了 page 是 records，所以在前端一定要改逻辑
     }
 
 
