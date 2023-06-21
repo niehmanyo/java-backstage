@@ -3,15 +3,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.example.demo.Mapper.WeixinMapper">
+    <delete id="deleteFood">
+        delete from menuList where name = #{name}
+    </delete>
 
-<select id="numberOfFoodInMenu" resultType="int">
+    <select id="numberOfFoodInMenu" resultType="int">
     select count(*) from menuList
 </select>
 
-    <select id="getMenuList" resultType="com.example.demo.Entity.Food">
-        select * from menuList
+    <select id="getMostPreciousPieceList" resultType="com.example.demo.Entity.Food">
+        select * from most_precious_piece;
     </select>
 
+    <insert id="insertMostPreciousFood">
+         insert into most_precious_piece values(#{name},#{image},#{price},#{num})
+    </insert>
+
+    <insert id="insertFood">
+        insert into menuList values(#{name},#{image},#{price},#{num},#{kind})
+    </insert>
 
 
 </mapper>
