@@ -8,6 +8,7 @@ import com.example.demo.Entity.Manager;
 import com.example.demo.Entity.User;
 import com.example.demo.Mapper.UserMapper;
 import com.example.demo.Service.UserService;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -58,7 +59,6 @@ public class UserController {
         String mysqlDate = sdf.format(dt);
         user.setDate(mysqlDate);
         return userService.save(user);
-        
     }
 
     @GetMapping("/search")
@@ -66,6 +66,19 @@ public class UserController {
         return Boolean.TRUE;
     }
 
+
+    @DeleteMapping("/delete/{name}")
+    public Integer deleteUser(@PathVariable("name") String name){
+        return userMapper.deleteUser(name);
+    };
+
+    @DeleteMapping("/delBatch/")
+    public Integer deleteBatchUser(@RequestParam List<String> names){
+        for (int i = 0; i < names.size(); i++) {
+            deleteUser(names.get(i));
+        }
+        return 1;
+    }
 
     /*
      *  做分页查询
@@ -95,6 +108,8 @@ public class UserController {
         return userService.page(page,queryWrapper);
         // 这边接口回调一定要看他返回的类型，之前我声明是 data，现在用了 page 是 records，所以在前端一定要改逻辑
     }
+
+    
 
 
 }

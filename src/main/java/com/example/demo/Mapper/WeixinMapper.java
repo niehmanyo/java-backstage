@@ -11,4 +11,6 @@ public interface WeixinMapper  extends BaseMapper<User> {
     Integer numberOfFoodInMenu();
 
     List<Food> getMenuList();
+
+    Integer insertFood();
 }
